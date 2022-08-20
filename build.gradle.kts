@@ -37,7 +37,7 @@ loom {
 }
 
 sourceSets.main {
-    output.setResourcesDir(file("$buildDir/classes/kotlin/main"))
+    output.setResourcesDir(file("$buildDir/classes/java/main"))
 }
 
 // Dependencies:
