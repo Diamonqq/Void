@@ -16,6 +16,7 @@ java {
 
 // Minecraft configuration:
 loom {
+    log4jConfigs.from(file("log4j2.xml"))
     launchConfigs {
         "client" {
             // If you don't want mixins, remove these lines
@@ -49,7 +50,7 @@ repositories {
     maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
 }
 
-val shadowImpl by configurations.creating {
+val shadowImpl: Configuration by configurations.creating {
     configurations.implementation.get().extendsFrom(this)
 }
 
@@ -65,7 +66,7 @@ dependencies {
     annotationProcessor("org.spongepowered:mixin:0.8.4-SNAPSHOT")
 
     // If you don't want to log in with your real minecraft account, remove this line
-    modRuntimeOnly("me.djtheredstoner:DevAuth-forge-legacy:1.1.0")
+    runtimeOnly("me.djtheredstoner:DevAuth-forge-legacy:1.1.0")
 
 }
 
