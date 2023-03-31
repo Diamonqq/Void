@@ -14,6 +14,7 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.lwjgl.input.Keyboard;
 
 public class AutoBuy {
     private int lastAuctionBought = 0;
@@ -96,6 +97,11 @@ public class AutoBuy {
             Macro.getInstance().getQueue().setRunning(false);
             Minecraft.getMinecraft().thePlayer.closeScreen();
         }
+    }
+    
+    @SubscribeEvent
+    public void onKeyPress(InputEvent.KeyInputEvent event) {
+        if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) bedThread = null;
     }
 
     private void clickNugget(int id) {
