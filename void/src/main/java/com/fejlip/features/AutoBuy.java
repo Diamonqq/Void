@@ -20,7 +20,11 @@ import org.lwjgl.input.Keyboard;
 public class AutoBuy {
     private int lastAuctionBought = 0;
     private boolean bedStarted = false;
-
+    
+    public Thread getBedThread() {
+        return bedThread;
+    }
+    
     private Thread bedThread = null;
 
     private void handleBuyFinished() {
