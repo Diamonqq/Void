@@ -3,6 +3,7 @@ package com.fejlip.features;
 import com.fejlip.Macro;
 import com.fejlip.helpers.Helpers;
 import com.fejlip.helpers.QueueItem;
+import com.fejlip.features.AutoBuy;
 import net.minecraft.network.play.server.S2FPacketSetSlot;
 
 import java.io.PrintStream;
@@ -20,6 +21,7 @@ public class AutoOpen {
     }
 
     public void handleMessage(String str) {
+        if(new AutoBuy().getBedThread()) return;
         if (!Macro.getInstance().getConfig().isAutoOpenEnabled()) return;
         if (!str.startsWith("Received:")) return;
         Pattern pattern = Pattern.compile("type[\\\":]*flip");
