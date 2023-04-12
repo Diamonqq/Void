@@ -1,18 +1,18 @@
 [
-  {
-	"modid": "examplemod",
-	"name": "Xample Mod",
-	"description": "A mod that is used as an example.",
-	"version": "1.0.0",
-	"mcversion": "1.8.9",
-	"url": "https://github.com/romangraef/Forge1.8.9Template/",
-	"updateUrl": "",
-	"authorList": [
-	  "You"
-	],
-	"credits": "",
-	"logoFile": "",
-	"screenshots": [],
-	"dependencies": []
-  }
+	{
+		"modid": "hypixelqol",
+		"name": " Very Cool Hypixel Skyblock Mod",
+		"description": "Cool mod",
+		"version": "2.0.0",
+		"mcversion": "1.8.9",
+		"url": "https://discord.gg/5HjJYAHUHv",
+		"updateUrl": "",
+		"authorList": [
+			"Me and only me Conutik"
+		],
+		"credits": "Conutik piled this so it MINE",
+		"logoFile": "",
+		"screenshots": [],
+		"dependencies": []
+	}
 ]
