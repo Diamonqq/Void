@@ -15,9 +15,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = "examplemod", version = "2.0.0")
+@Mod(modid = "examplemod", version = "2.1.0")
 public class Macro {
-    public static final String version = "2.0.0";
+    public static final String version = "2.1.0";
     private static Macro instance;
     private final Queue queue = new Queue();
 
