@@ -22,6 +22,7 @@ public class FlipperMessage {
         String item = message.split("You purchased ")[1].split(" for")[0];
         Helpers.sendDebugMessage(item);
         PurchaseObject itemObj = Macro.getInstance().getPurchaseWaiter().get(item);
+        Helpers.sendDebugMessage((itemObj != null) + " ");
         if(itemObj != null) {
             itemObj.bought();
         }

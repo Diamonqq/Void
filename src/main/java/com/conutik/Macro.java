@@ -8,19 +8,21 @@ import com.conutik.features.Packets;
 import com.conutik.helpers.PurchaseWaiter;
 import com.conutik.helpers.Queue;
 import com.conutik.helpers.VersionChecker;
+import net.minecraft.client.multiplayer.ServerData;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = "mod", version = "2.0.0")
+@Mod(modid = "examplemod", version = "2.0.0")
 public class Macro {
     public static final String version = "2.0.0";
     private static Macro instance;
     private final Queue queue = new Queue();
 
     private final PurchaseWaiter purchaseWaiter = new PurchaseWaiter();
+    private static ServerData lastData = new ServerData("LastServer", "mc.hypixel.net:25565", false);
 
 
     public static Settings settings = new Settings();
@@ -49,6 +51,15 @@ public class Macro {
 
     public PurchaseWaiter getPurchaseWaiter() {
         return this.purchaseWaiter;
+    }
+
+
+    public static void lastServer(ServerData data) {
+        lastData = data;
+    }
+
+    public static ServerData lastServer() {
+        return lastData;
     }
 
 }

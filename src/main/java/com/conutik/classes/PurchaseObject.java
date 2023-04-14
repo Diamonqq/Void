@@ -26,10 +26,6 @@ public class PurchaseObject {
         this.itemProfitPercentage = itemProfitPercent;
     }
 
-    public void addStack(ItemStack stack) {
-        itemStack = stack;
-    }
-
     public void bought() {
         String content = "<@" + Settings.discordID + ">";
         String description = null;

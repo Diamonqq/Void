@@ -1,6 +1,7 @@
 package com.conutik.config;
 
 import com.conutik.helpers.Helpers;
+import com.conutik.helpers.Utils;
 import gg.essential.vigilance.Vigilant;
 import gg.essential.vigilance.data.JVMAnnotationPropertyCollector;
 import gg.essential.vigilance.data.Property;
@@ -198,9 +199,36 @@ public class Settings extends Vigilant {
     )
     public static boolean autoConnect = false;
 
+    @Property(
+            type = PropertyType.SWITCH,
+            category = "Anti-AFK",
+            subcategory = "Prevention",
+            name = "Anti-Ban",
+            description = "A Ban prevention measure"
+    )
+    public static boolean antiBan = false;
 
+    @Property(
+            type = PropertyType.NUMBER,
+            category = "Anti-AFK",
+            subcategory = "Prevention",
+            name = "Max Flip time",
+            description = "Maximum time allowed to flip in hours (Ban prevention measure)",
+            min = 0,
+            max = 14
+    )
+    public static int maxFlipTime = 5;
 
-
+    @Property(
+            type = PropertyType.NUMBER,
+            category = "Anti-AFK",
+            subcategory = "Prevention",
+            name = "Flip downtime",
+            description = "When to return to flipping in hours. (Ban prevention measure)",
+            min = 0,
+            max = 10
+    )
+    public static int minFlipTime = 2;
 
     public Settings() {
         super(CONFIG_FILE, "Void Flipper Configuration", new JVMAnnotationPropertyCollector());
@@ -216,6 +244,17 @@ public class Settings extends Vigilant {
         });
         registerListener("fullSkipDelay", choice -> {
             Helpers.sendChatMessage("New full skip delay: " + (fullSkipDelay+1));
+        });
+        registerListener("maxFlipTime", choice -> {
+            Helpers.sendChatMessage("Maximum flip time is now: " + maxFlipTime);
+        });
+        registerListener("minFlipTime", choice -> {
+            Helpers.sendChatMessage("Flip downtime is now: " + minFlipTime);
+        });
+        registerListener("antiBan", choice -> {
+            if(antiBan) Utils.stopChecker();
+            else Utils.initiateChecker();
+            Helpers.sendChatMessage("Anti-Ban " + (antiBan ? "off" : "on"));
         });
         registerListener("debug", choice -> {
             Helpers.sendChatMessage("Debug " + (debug ? "off" : "on"));

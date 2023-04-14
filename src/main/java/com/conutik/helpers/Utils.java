@@ -8,9 +8,9 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.EnumChatFormatting;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.lang.Long.parseLong;
 
@@ -18,6 +18,49 @@ public class Utils {
 
     public static boolean isInSkyblock = false;
     public static long purse = 0;
+    public static Thread checkerThread;
+
+    public static boolean isWorking = true;
+    private static long nextChange = System.currentTimeMillis();
+
+    public static void stopChecker() {
+        if(checkerThread != null) {
+            checkerThread = null;
+        }
+    }
+
+    public static void initiateChecker() {
+        nextChange = (System.currentTimeMillis() + ((long) Settings.maxFlipTime *60*1000));
+        isWorking = true;
+        checkerThread = new Thread(() -> {
+            setTimeout(Utils::check, 10000);
+        });
+        checkerThread.start();
+    }
+
+    public static void check() {
+        if(nextChange <= System.currentTimeMillis()) {
+            if(isWorking) {
+                nextChange = (System.currentTimeMillis() + ((long) Settings.minFlipTime *60*1000));
+                isWorking = !isWorking;
+                Minecraft.getMinecraft().thePlayer.playSound("random.orb", 50, 2f);
+                Helpers.sendChatMessage(EnumChatFormatting.RED + "FLIPS HAVE NOW BEEN STOPPED BY ANTI-BAN");
+                Helpers.sendChatMessage(EnumChatFormatting.RED + "FLIPS HAVE NOW BEEN STOPPED BY ANTI-BAN");
+                Helpers.sendChatMessage(EnumChatFormatting.RED + "FLIPS HAVE NOW BEEN STOPPED BY ANTI-BAN");
+                Helpers.sendChatMessage(EnumChatFormatting.RED + "FLIPS HAVE NOW BEEN STOPPED BY ANTI-BAN");
+            } else {
+                Minecraft.getMinecraft().thePlayer.playSound("random.orb", 50, 2f);
+                nextChange = (System.currentTimeMillis() + ((long) Settings.maxFlipTime *60*1000));
+                isWorking = !isWorking;
+                Helpers.sendChatMessage(EnumChatFormatting.GREEN + "FLIPS HAVE NOW BEEN RESUMED BY ANTI-BAN");
+                Helpers.sendChatMessage(EnumChatFormatting.GREEN + "FLIPS HAVE NOW BEEN RESUMED BY ANTI-BAN");
+                Helpers.sendChatMessage(EnumChatFormatting.GREEN + "FLIPS HAVE NOW BEEN RESUMED BY ANTI-BAN");
+                Helpers.sendChatMessage(EnumChatFormatting.GREEN + "FLIPS HAVE NOW BEEN RESUMED BY ANTI-BAN");
+            }
+        }
+    }
+
+
     public static void setTimeout(Runnable runnable, int delay){
         new Thread(() -> {
             try {
@@ -30,10 +73,49 @@ public class Utils {
         }).start();
     }
 
+    static HashSet<Integer> getGroups(String format)
+    {
+        Pattern pattern = Pattern.compile("(?:\\{(\\d+?)\\+?\\})");
+        Matcher matcher = pattern.matcher(format);
+
+        HashSet<Integer> matched = new HashSet<>();
+        while(matcher.find())
+        {
+            for (int i = 1; i <= matcher.groupCount(); i++) {
+                int parsed = Integer.parseInt(matcher.group(i));
+                if(!matched.contains(parsed))
+                    matched.add(parsed);
+            }
+        }
+        return matched;
+    }
+
+    public static Optional<HashMap<Integer, String>> extractParameters(String format, String text)
+    {
+        String clean = Pattern.quote(format).replaceAll("(\\{(\\d+?)\\})", "\\\\E(?<group$2>.+?)\\\\Q").replaceAll("(\\{(\\d+?)\\+\\})", "\\\\E(?<group$2>.+)\\\\Q").replaceAll("(\\{\\!\\})", "\\\\E(?:.+?)\\\\Q").replaceAll("(\\{\\!\\+\\})", "\\\\E(?:.+)\\\\Q");
+
+        Matcher matcher = Pattern.compile(clean).matcher(text);
+        if(!matcher.find())
+        {
+            return Optional.empty();
+        }
+
+        HashMap<Integer, String> matches = new HashMap<>();
+        HashSet<Integer> groups = getGroups(format);
+        for(int key : groups)
+        {
+            try {
+                matches.put(key, matcher.group("group" + key));
+            } catch (Exception ignored) {}
+        }
+        return Optional.of(matches);
+    }
+
     private static void checkIfInSkyblock(String s) {
         if (s.contains("SKYBLOCK") && !isInSkyblock) {
             isInSkyblock = true;
-        } else if (!s.contains("SKYBLOCK") && isInSkyblock && Settings.autoLobby) {
+            if(Settings.antiBan) Utils.initiateChecker();
+        } else if (!s.contains("SKYBLOCK") && isInSkyblock && Settings.autoLobby && isWorking) {
             setTimeout(() -> {
                 Helpers.sendDebugMessage("Found outside of skyblock, taking you back in O_O");
                 (Minecraft.getMinecraft()).thePlayer.sendChatMessage("/play sb");
@@ -86,7 +168,7 @@ public class Utils {
             String line = EnumChatFormatting.getTextWithoutFormattingCodes(scoreBoardLines.get(size - i).toLowerCase());
                 ProcessScoreboard(line);
             if (line.contains("⏣") && !line.equals(" ⏣ your island")) {
-                    if(Settings.autoIsland) setTimeout(() -> {
+                    if(Settings.autoIsland && isWorking) setTimeout(() -> {
                         Helpers.sendDebugMessage("Why you not at your island, go back to your \"workers\"");
                         Minecraft.getMinecraft().thePlayer.sendChatMessage("/is");
                     }, 5000);

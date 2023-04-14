@@ -1,4 +1,4 @@
-package com.conutik.mixin;
+package mixin;
 
 import net.minecraft.client.gui.GuiMultiplayer;
 import org.spongepowered.asm.mixin.Mixin;

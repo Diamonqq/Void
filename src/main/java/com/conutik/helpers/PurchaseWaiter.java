@@ -8,18 +8,18 @@ public class PurchaseWaiter {
     private final HashMap<String, PurchaseObject> map = new HashMap<>();
 
     public void add(String id, PurchaseObject obj) {
-        Helpers.sendDebugMessage("Added item");
         this.map.put(id, obj);
+        Helpers.sendDebugMessage("Added " + id);
         Utils.setTimeout(() -> {
-            Helpers.sendDebugMessage("Item removed from map");
+            Helpers.sendDebugMessage(id + " removed from map");
             this.map.remove(id);
-        }, 10000);
+        }, 20000);
     }
 
     public PurchaseObject get(String itemName) {
-        Helpers.sendDebugMessage("Gotten item");
         PurchaseObject item = this.map.get(itemName);
         this.map.remove(itemName);
+        Helpers.sendDebugMessage("Gotten " + itemName);
         return item;
     }
 }

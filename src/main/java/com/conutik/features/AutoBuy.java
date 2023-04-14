@@ -11,6 +11,7 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -21,7 +22,6 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.regex.Pattern;
 
 import static com.conutik.helpers.Utils.ScoreboardData;
 import static com.conutik.helpers.Utils.setTimeout;
@@ -38,9 +38,6 @@ public class AutoBuy {
 
     private Queue queue = Macro.getInstance().getQueue();
 
-    Pattern percentageProfitRegexValue = Pattern.compile("\\\\d+(?:\\\\.\\\\d+)?(?=\\\\%)");
-    Pattern priceRegex = Pattern.compile("\\d+(?:\\.\\d+)?(?=[MKB])");
-
     public static void handleBuyFinished() {
         bedStarted = false;
         if (bedThread != null && bedThread.isAlive()) {
@@ -55,7 +52,7 @@ public class AutoBuy {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onInventoryRendering(GuiScreenEvent.DrawScreenEvent.Post post) {
-        if(Settings.autoBuy && (post.gui instanceof GuiChest)) {
+        if(Settings.autoBuy && Utils.isWorking && (post.gui instanceof GuiChest)) {
             ContainerChest chest = (ContainerChest) ((GuiChest) post.gui).inventorySlots;
             if (chest != null) {
                 String name = chest.getLowerChestInventory().getName();
@@ -127,7 +124,7 @@ public class AutoBuy {
                 Helpers.sendDebugMessage("An error occured while trying to send webhook.");
             }
         }
-        if(str.equals("You were spawned in Limbo.") && Settings.antiLimbo) {
+        if(str.equals("You were spawned in Limbo.") && Settings.antiLimbo && Utils.isWorking) {
             Helpers.sendDebugMessage("Found you in, taking you back to lobby");
             Utils.setTimeout(() -> {
                 lastCommandRan = "/lobby";
@@ -145,21 +142,21 @@ public class AutoBuy {
             }, 2500);
         }
 
-        if(str.contains("Cannot join SkyBlock for a moment!") && Settings.autoLobby) {
+        if(str.contains("Cannot join SkyBlock for a moment!") && Settings.autoLobby && Utils.isWorking) {
             Helpers.sendDebugMessage("Trying to push you into skyblock again");
             Utils.setTimeout(() -> {
                 lastCommandRan = "/play sb";
                 Minecraft.getMinecraft().thePlayer.sendChatMessage("/play sb");
             }, 2500);
         }
-        if(str.contains("You are sending commands too fast!") && Settings.autoLobby) {
+        if(str.contains("You are sending commands too fast!") && Settings.autoLobby && Utils.isWorking) {
             Helpers.sendDebugMessage("Running commands quickly? slow down mcqueen");
             Utils.setTimeout(() -> {
                 if(lastCommandRan != null) Minecraft.getMinecraft().thePlayer.sendChatMessage(lastCommandRan);
             }, 2500);
         }
 
-        if(str.replaceAll("§.", "").contains("Hello there, you acted suspiciously like a macro bot")) {
+        if(EnumChatFormatting.getTextWithoutFormattingCodes(str).equals("[Coflnet]: Generating captcha")) {
             String content = "<@" + Settings.discordID + ">";
             if(!Settings.captchaWebhooks) return;
             if(Settings.discordID.isEmpty()) content = "A Captcha appeared";
@@ -186,7 +183,7 @@ public class AutoBuy {
 
         if(str.contains("[Auction]") && str.contains("bought") && !event.message.getChatStyle().isEmpty()) {
             String action = event.message.getChatStyle().getChatClickEvent().getValue();
-            if(Settings.autoClaim) {
+            if(Settings.autoClaim && Utils.isWorking) {
                 Minecraft.getMinecraft().thePlayer.sendChatMessage(action);
                 Utils.setTimeout(() -> {
                     Minecraft.getMinecraft().playerController.windowClick(Minecraft.getMinecraft().thePlayer.openContainer.windowId, 31, 0, 3, Minecraft.getMinecraft().thePlayer);
@@ -204,9 +201,6 @@ public class AutoBuy {
             String description = null;
             if(!Settings.purchaseWebhookDescription.isEmpty()) description = Settings.purchaseWebhookDescription;
             Webhook purchaseWebhook = new Webhook(Settings.purchaseWebhookURL);
-            Helpers.sendDebugMessage(purchaser);
-            Helpers.sendDebugMessage(item);
-            Helpers.sendDebugMessage(price);
             purchaseWebhook.setContent(content);
             purchaseWebhook.setAvatarUrl("https://cdn.discordapp.com/icons/1074429357642227853/f2f3c75446e8774afe5c448d83401153.png");
             purchaseWebhook.setUsername("Void Flipper");
@@ -244,12 +238,20 @@ public class AutoBuy {
                 }
             });
         }
-        if (Settings.autoOpen && !queue.isEmpty() && !queue.isRunning()) {
+        if (Settings.autoOpen && Utils.isWorking && !queue.isEmpty() && !queue.isRunning()) {
             this.queue.setRunning(true);
             QueueItem item = this.queue.get();
             item.openAuction();
         }
     }
+
+//    @SubscribeEvent
+//    public void onDisconnect(PlayerEvent.PlayerLoggedOutEvent event) {
+//        if(!Settings.autoConnect) return;
+//        Utils.setTimeout(() -> {
+//            Minecraft.getMinecraft().
+//        }, 5000);
+//    }
 
     private void clickNugget(int id) {
         click(id, 31);
