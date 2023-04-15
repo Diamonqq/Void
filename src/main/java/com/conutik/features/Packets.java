@@ -9,6 +9,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S2DPacketOpenWindow;
+import net.minecraft.network.play.server.S30PacketWindowItems;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 

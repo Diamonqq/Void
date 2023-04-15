@@ -156,7 +156,7 @@ public class AutoBuy {
             }, 2500);
         }
 
-        if(EnumChatFormatting.getTextWithoutFormattingCodes(str).equals("[Coflnet]: Generating captcha")) {
+        if(str.contains("Hello there, you acted suspiciously like a macro bot")) {
             String content = "<@" + Settings.discordID + ">";
             if(!Settings.captchaWebhooks) return;
             if(Settings.discordID.isEmpty()) content = "A Captcha appeared";

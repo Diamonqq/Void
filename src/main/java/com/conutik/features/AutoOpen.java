@@ -69,7 +69,7 @@ public class AutoOpen {
         if(te.isPresent())
         {
             HashMap<Integer, String> hash = te.get();
-            Macro.getInstance().getPurchaseWaiter().add(hash.get(2).replaceAll("\\.$", ""), new PurchaseObject(hash.get(2).replaceAll("\\.$", ""), hash.get(4), hash.get(5), hash.get(7)));
+            Macro.getInstance().getPurchaseWaiter().add(hash.get(2).replaceAll("\\.$", "").replaceAll("\\!$", ""), new PurchaseObject(hash.get(2).replaceAll("\\.$", "").replaceAll("\\!$", ""), hash.get(4), hash.get(5), hash.get(7)));
         }
     }
 }

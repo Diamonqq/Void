@@ -20,9 +20,7 @@ public class FlipperMessage {
     public void itemBought(String message) throws IOException {
         myFormat.setGroupingUsed(true);
         String item = message.split("You purchased ")[1].split(" for")[0];
-        Helpers.sendDebugMessage(item);
         PurchaseObject itemObj = Macro.getInstance().getPurchaseWaiter().get(item);
-        Helpers.sendDebugMessage((itemObj != null) + " ");
         if(itemObj != null) {
             itemObj.bought();
         }
