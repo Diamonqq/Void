@@ -65,6 +65,7 @@ public class AutoBuy {
                                 handleBuyFinished();
                                 Minecraft.getMinecraft().thePlayer.closeScreen();
                             } else if (Items.bed == stack.getItem() && !bedStarted) {
+//                                Helpers.sendDebugMessage("Old bed :D");
                                 bedStarted = true;
                                 bedThread = new Thread(() -> {
                                     int loopInt = 0;
@@ -155,32 +156,6 @@ public class AutoBuy {
                 if(lastCommandRan != null) Minecraft.getMinecraft().thePlayer.sendChatMessage(lastCommandRan);
             }, 2500);
         }
-
-        if(str.contains("Hello there, you acted suspiciously like a macro bot")) {
-            String content = "<@" + Settings.discordID + ">";
-            if(!Settings.captchaWebhooks) return;
-            if(Settings.discordID.isEmpty()) content = "A Captcha appeared";
-            if(Settings.captchaWebhookURL.isEmpty()) return;
-            String description = null;
-            if(!Settings.captchaWebhookDescription.isEmpty()) description = Settings.captchaWebhookDescription;
-            Webhook webhook = new Webhook(Settings.captchaWebhookURL);
-            webhook.setContent(content);
-            webhook.setAvatarUrl("https://cdn.discordapp.com/icons/1074429357642227853/f2f3c75446e8774afe5c448d83401153.png");
-            webhook.setUsername("Void Flipper");
-            webhook.addEmbed(
-                    new Webhook.EmbedObject()
-                            .setTitle("Captcha has appeared")
-                            .setColor(Color.BLACK)
-                            .setDescription("```A WILD CAPTCHA HAS APPEARED. SOLVE IT TO CONTINUE YOUR FLIPPING JOURNEY !!!```\n" + description)
-                            .setThumbnail("https://minotar.net/helm/" + Minecraft.getMinecraft().thePlayer.getDisplayNameString() + "/600.png")
-            );
-            try{
-                webhook.execute();
-            } catch (IOException e) {
-                Helpers.sendDebugMessage(e.getMessage());
-            }
-        }
-
         if(str.contains("[Auction]") && str.contains("bought") && !event.message.getChatStyle().isEmpty()) {
             String action = event.message.getChatStyle().getChatClickEvent().getValue();
             if(Settings.autoClaim && Utils.isWorking) {
@@ -207,7 +182,7 @@ public class AutoBuy {
             purchaseWebhook.addEmbed(
                     new Webhook.EmbedObject()
                             .setTitle("Item Sold")
-                            .setColor(Color.BLACK)
+                            .setColor(Settings.purchaseWebhookColor)
                             .addField("Item:", item, false)
                             .addField("Purchaser:", purchaser, false)
                             .addField("Price:", price, false)
@@ -244,14 +219,6 @@ public class AutoBuy {
             item.openAuction();
         }
     }
-
-//    @SubscribeEvent
-//    public void onDisconnect(PlayerEvent.PlayerLoggedOutEvent event) {
-//        if(!Settings.autoConnect) return;
-//        Utils.setTimeout(() -> {
-//            Minecraft.getMinecraft().
-//        }, 5000);
-//    }
 
     private void clickNugget(int id) {
         click(id, 31);

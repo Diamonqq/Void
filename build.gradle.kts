@@ -58,6 +58,8 @@ dependencies {
     minecraft("com.mojang:minecraft:1.8.9")
     mappings("de.oceanlabs.mcp:mcp_stable:22-1.8.9")
     forge("net.minecraftforge:forge:1.8.9-11.15.1.2318-1.8.9")
+    implementation("org.java-websocket:Java-WebSocket:1.5.3")
+    implementation("com.google.code.gson:gson:2.10.1")
     // If you don't want mixins, remove these lines
     shadowImpl("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
         isTransitive = false

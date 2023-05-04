@@ -6,11 +6,9 @@
   "mixins": [
   ],
   "client": [
-    "DisconnectGUIMixin",
-    "mixin.GuiConnectingMixin",
-    "mixin.GuiDisconnectedMixin",
-    "mixin.GuiMultiplayerAccessor",
-    "MixinGuiDisconnected",
-    "mixin.MultiplayerGUIMixin"
+    "GuiConnectingMixin",
+    "GuiDisconnectedMixin",
+    "GuiMultiplayerAccessor",
+    "MultiplayerGUIMixin"
   ]
 }

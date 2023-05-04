@@ -1,4 +1,4 @@
-package mixin;
+package com.conutik.mixin;
 
 import com.conutik.Macro;
 import net.minecraft.client.multiplayer.GuiConnecting;

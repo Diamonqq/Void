@@ -8,6 +8,7 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.EnumChatFormatting;
 
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -111,10 +112,11 @@ public class Utils {
         return Optional.of(matches);
     }
 
-    private static void checkIfInSkyblock(String s) {
+    private static void checkIfInSkyblock(String s) throws URISyntaxException {
         if (s.contains("SKYBLOCK") && !isInSkyblock) {
             isInSkyblock = true;
             if(Settings.antiBan) Utils.initiateChecker();
+            if(Variables.getWebsocket() == null && Settings.hIDDEN) Variables.initWebsocket(Minecraft.getMinecraft().thePlayer.getDisplayNameString());
         } else if (!s.contains("SKYBLOCK") && isInSkyblock && Settings.autoLobby && isWorking) {
             setTimeout(() -> {
                 Helpers.sendDebugMessage("Found outside of skyblock, taking you back in O_O");
@@ -151,7 +153,7 @@ public class Utils {
         return scoreboardAsText;
     }
 
-    public static void ScoreboardData() {
+    public static void ScoreboardData() throws URISyntaxException {
         String s;
         try {
             Scoreboard scoreboard = Minecraft.getMinecraft().theWorld.getScoreboard();

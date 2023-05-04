@@ -1,7 +1,6 @@
-package mixin;
+package com.conutik.mixin;
 
 import com.conutik.Macro;
-import com.conutik.config.Settings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiMultiplayer;

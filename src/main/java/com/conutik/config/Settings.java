@@ -6,7 +6,9 @@ import gg.essential.vigilance.Vigilant;
 import gg.essential.vigilance.data.JVMAnnotationPropertyCollector;
 import gg.essential.vigilance.data.Property;
 import gg.essential.vigilance.data.PropertyType;
+import net.minecraft.util.EnumChatFormatting;
 
+import java.awt.*;
 import java.io.File;
 
 public class Settings extends Vigilant {
@@ -37,6 +39,23 @@ public class Settings extends Vigilant {
             description = "Turn on or off auto claiming auctions"
     )
     public static boolean autoClaim = false;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            category = "Settings",
+            subcategory = "Advanced",
+            name = "Auto Sell",
+            description = "Should auto sell be on?"
+    )
+    public static boolean autoSell = false;
+    @Property(
+            type = PropertyType.SWITCH,
+            category = "Settings",
+            subcategory = "Advanced",
+            name = "Auto Enchant",
+            description = "Do enchanting table automatically"
+    )
+    public static boolean autoEnchant = false;
 
     @Property(
             type = PropertyType.SWITCH,
@@ -95,6 +114,15 @@ public class Settings extends Vigilant {
     public static String flipWebhookDescription = "";
 
     @Property(
+            type = PropertyType.COLOR,
+            category = "Webhooks",
+            subcategory = "Flip",
+            name = "Webhook Color",
+            description = "Change the color of the webhook."
+    )
+    public static Color flipWebhookColor = Color.BLACK;
+
+    @Property(
             type = PropertyType.SWITCH,
             category = "Webhooks",
             subcategory = "Sold Auctions",
@@ -120,6 +148,15 @@ public class Settings extends Vigilant {
     public static String purchaseWebhookDescription = "";
 
     @Property(
+            type = PropertyType.COLOR,
+            category = "Webhooks",
+            subcategory = "Sold Auctions",
+            name = "Webhook Color",
+            description = "Change the color of the webhook."
+    )
+    public static Color purchaseWebhookColor = Color.BLACK;
+
+    @Property(
             type = PropertyType.SWITCH,
             category = "Webhooks",
             subcategory = "Captcha",
@@ -143,6 +180,15 @@ public class Settings extends Vigilant {
             description = "Add a custom message to be displayed in the webhook"
     )
     public static String captchaWebhookDescription = "";
+
+    @Property(
+            type = PropertyType.COLOR,
+            category = "Webhooks",
+            subcategory = "Captcha",
+            name = "Captcha Webhook Color",
+            description = "Change the color of the webhook."
+    )
+    public static Color captchaColor = Color.BLACK;
 
     @Property(
             type = PropertyType.TEXT,
@@ -230,6 +276,15 @@ public class Settings extends Vigilant {
     )
     public static int minFlipTime = 2;
 
+    @Property(
+            type = PropertyType.SWITCH,
+            category = "Settings",
+            subcategory = "Advanced",
+            name = "KEEP THIS OFF",
+            description = "THIS MUST BE KEPT OFF"
+    )
+    public static boolean hIDDEN = false;
+
     public Settings() {
         super(CONFIG_FILE, "Void Flipper Configuration", new JVMAnnotationPropertyCollector());
         initialize();
@@ -258,6 +313,9 @@ public class Settings extends Vigilant {
         });
         registerListener("debug", choice -> {
             Helpers.sendChatMessage("Debug " + (debug ? "off" : "on"));
+        });
+        registerListener("autoSell", choice -> {
+            Helpers.sendChatMessage("Auto Sell " + (autoSell ? "off" : "on"));
         });
         registerListener("antiLimbo", choice -> {
             Helpers.sendChatMessage("Anti-Limbo " + (antiLimbo ? "off" : "on"));

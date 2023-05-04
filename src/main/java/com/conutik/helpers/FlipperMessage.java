@@ -2,6 +2,7 @@ package com.conutik.helpers;
 
 import com.conutik.Macro;
 import com.conutik.classes.PurchaseObject;
+import net.minecraft.client.Minecraft;
 
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -23,6 +24,7 @@ public class FlipperMessage {
         PurchaseObject itemObj = Macro.getInstance().getPurchaseWaiter().get(item);
         if(itemObj != null) {
             itemObj.bought();
+            itemObj.autoSell();
         }
     }
 }

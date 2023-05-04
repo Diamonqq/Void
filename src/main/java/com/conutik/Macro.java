@@ -4,7 +4,9 @@ import com.conutik.config.Settings;
 import com.conutik.config.commands.MacroCommand;
 import com.conutik.features.AutoBuy;
 import com.conutik.features.AutoOpen;
+import com.conutik.features.EnchantMacro;
 import com.conutik.features.Packets;
+import com.conutik.helpers.ClassUtils;
 import com.conutik.helpers.PurchaseWaiter;
 import com.conutik.helpers.Queue;
 import com.conutik.helpers.VersionChecker;
@@ -42,6 +44,8 @@ public class Macro {
         MinecraftForge.EVENT_BUS.register(new AutoBuy());
         MinecraftForge.EVENT_BUS.register(new Packets());
         MinecraftForge.EVENT_BUS.register(new VersionChecker());
+        MinecraftForge.EVENT_BUS.register(new EnchantMacro());
+        MinecraftForge.EVENT_BUS.register(ClassUtils.getInstance());
         new AutoOpen();
     }
 
