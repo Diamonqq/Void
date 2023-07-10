@@ -24,7 +24,6 @@ public class FlipperMessage {
         PurchaseObject itemObj = Macro.getInstance().getPurchaseWaiter().get(item);
         if(itemObj != null) {
             itemObj.bought();
-            itemObj.autoSell();
         }
     }
 }

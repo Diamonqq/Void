@@ -6,19 +6,21 @@ import gg.essential.vigilance.Vigilant;
 import gg.essential.vigilance.data.JVMAnnotationPropertyCollector;
 import gg.essential.vigilance.data.Property;
 import gg.essential.vigilance.data.PropertyType;
-import net.minecraft.util.EnumChatFormatting;
 
 import java.awt.*;
 import java.io.File;
 
+import static com.conutik.helpers.Formatting.*;
+
 public class Settings extends Vigilant {
 
+    // SETTINGS
     @Property(
             type = PropertyType.SWITCH,
             category = "Settings",
             subcategory = "Advanced",
             name = "Auto Buy",
-            description = "Should auto buy be on?"
+            description = "When enabled, Void will buy any BIN auction that you enter."
     )
     public static boolean autoBuy = false;
 
@@ -27,7 +29,7 @@ public class Settings extends Vigilant {
             category = "Settings",
             subcategory = "Advanced",
             name = "Auto Open",
-            description = "Should auto open be on? \nP.S: Full skip is turned on with this :D"
+            description = "When enabled, Void will open any flips that are received."
     )
     public static boolean autoOpen = false;
 
@@ -36,7 +38,7 @@ public class Settings extends Vigilant {
             category = "Settings",
             subcategory = "Advanced",
             name = "Auto Claim",
-            description = "Turn on or off auto claiming auctions"
+            description = "Enable/disable auto-claiming sold auctions."
     )
     public static boolean autoClaim = false;
 
@@ -44,25 +46,8 @@ public class Settings extends Vigilant {
             type = PropertyType.SWITCH,
             category = "Settings",
             subcategory = "Advanced",
-            name = "Auto Sell",
-            description = "Should auto sell be on?"
-    )
-    public static boolean autoSell = false;
-    @Property(
-            type = PropertyType.SWITCH,
-            category = "Settings",
-            subcategory = "Advanced",
-            name = "Auto Enchant",
-            description = "Do enchanting table automatically"
-    )
-    public static boolean autoEnchant = false;
-
-    @Property(
-            type = PropertyType.SWITCH,
-            category = "Settings",
-            subcategory = "Advanced",
             name = "Debug",
-            description = "Should debug be on?"
+            description = "Shows debugging information in chat when enabled."
     )
     public static boolean debug = false;
 
@@ -77,25 +62,71 @@ public class Settings extends Vigilant {
     )
     public static int bedDelay = 75;
 
+    /*
+    @Property(
+            type = PropertyType.SLIDER,
+            category = "Settings",
+            subcategory = "Advanced",
+            name = "Bed Thread Kill Delay",
+            description = "Set the bed thread kill delay",
+            min = 50,
+            max = 5000,
+            increment = 50
+    )
+    */
+    public static int bedThreadKillDelay = 750;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            category = "Settings",
+            subcategory = "Advanced",
+            name = "Full Skip",
+            description = "Enable/disable full skip."
+    )
+    public static boolean fullSkip = false;
+
     @Property(
             type = PropertyType.NUMBER,
             category = "Settings",
             subcategory = "Advanced",
             name = "Full Skip Delay",
-            description = "What should full skip delay be?",
+            description = "Full skip delay in milliseconds.",
             min = 0,
             max = 1_00_000
     )
     public static int fullSkipDelay = 10;
 
     @Property(
+            type = PropertyType.TEXT,
+            category = "Settings",
+            subcategory = "Customization",
+            name = "Mod Prefix",
+            description = "Changes the mod's message prefix. Leave blank for the default format."
+    )
+    public static String modPrefix = "";
+
+    /*
+    No worky atm
+    @Property(
+            type = PropertyType.SWITCH,
+            category = "Settings",
+            subcategory = "Advanced",
+            name = "Send Flip Buyer",
+            description = "Enable/disable sending the flip buyer in chat when opening a bought flip."
+    )
+    */
+    public static boolean sendFlipBuyer = false;
+
+    // WEBHOOKS
+    // FLIP WEBHOOK
+    @Property(
             type = PropertyType.SWITCH,
             category = "Webhooks",
             subcategory = "Flip",
             name = "Flip Webhook",
-            description = "Turn on or off flip webhooks"
+            description = "Enable/disable webhook messages being sent when a flip is bought."
     )
-    public static boolean flipWebhooks = false;
+    public static boolean buyWebhooks = false;
     @Property(
             type = PropertyType.TEXT,
             category = "Webhooks",
@@ -103,16 +134,15 @@ public class Settings extends Vigilant {
             name = "URL",
             description = "Flip Webhook URL"
     )
-    public static String flipWebhookURL = "";
+    public static String buyWebhookURL = "";
     @Property(
             type = PropertyType.TEXT,
             category = "Webhooks",
             subcategory = "Flip",
             name = "Custom Message",
-            description = "Add a custom message to be displayed in the webhook"
+            description = "Add a custom message to be sent in the webhook embed."
     )
-    public static String flipWebhookDescription = "";
-
+    public static String buyWebhookDescription = "";
     @Property(
             type = PropertyType.COLOR,
             category = "Webhooks",
@@ -120,16 +150,17 @@ public class Settings extends Vigilant {
             name = "Webhook Color",
             description = "Change the color of the webhook."
     )
-    public static Color flipWebhookColor = Color.BLACK;
+    public static Color buyWebhookColor = new Color(0, 0, 0);
 
+    // PURCHASE WEBHOOK
     @Property(
             type = PropertyType.SWITCH,
             category = "Webhooks",
             subcategory = "Sold Auctions",
             name = "Webhook",
-            description = "Turn on or off purchase webhooks"
+            description = "Enable/disable webhook messages being sent when auctions are sold."
     )
-    public static boolean purchaseWebhooks = false;
+    public static boolean soldWebhooks = false;
     @Property(
             type = PropertyType.TEXT,
             category = "Webhooks",
@@ -137,16 +168,15 @@ public class Settings extends Vigilant {
             name = "URL",
             description = "Sold Auctions Webhook URL"
     )
-    public static String purchaseWebhookURL = "";
+    public static String soldWebhookURL = "";
     @Property(
             type = PropertyType.TEXT,
             category = "Webhooks",
             subcategory = "Sold Auctions",
             name = "Custom Message",
-            description = "Add a custom message to be displayed in the webhook"
+            description = "Add a custom message to be displayed in the webhook."
     )
-    public static String purchaseWebhookDescription = "";
-
+    public static String soldWebhookDescription = "";
     @Property(
             type = PropertyType.COLOR,
             category = "Webhooks",
@@ -154,14 +184,15 @@ public class Settings extends Vigilant {
             name = "Webhook Color",
             description = "Change the color of the webhook."
     )
-    public static Color purchaseWebhookColor = Color.BLACK;
+    public static Color soldWebhookColor = new Color(0, 170, 255);
 
+    // CAPTCHA WEBHOOK
     @Property(
             type = PropertyType.SWITCH,
             category = "Webhooks",
             subcategory = "Captcha",
             name = "Captcha Webhook",
-            description = "Turn on or off captcha webhooks"
+            description = "Enable/disable webhook messages being sent when a Cofl captcha is encountered."
     )
     public static boolean captchaWebhooks = false;
     @Property(
@@ -177,10 +208,9 @@ public class Settings extends Vigilant {
             category = "Webhooks",
             subcategory = "Captcha",
             name = "Custom Message",
-            description = "Add a custom message to be displayed in the webhook"
+            description = "Add a custom message to be displayed in the webhook."
     )
     public static String captchaWebhookDescription = "";
-
     @Property(
             type = PropertyType.COLOR,
             category = "Webhooks",
@@ -188,14 +218,14 @@ public class Settings extends Vigilant {
             name = "Captcha Webhook Color",
             description = "Change the color of the webhook."
     )
-    public static Color captchaColor = Color.BLACK;
+    public static Color captchaColor = new Color(255, 65, 65);
 
     @Property(
             type = PropertyType.TEXT,
             category = "Webhooks",
             subcategory = "Misc",
             name = "Format",
-            description = "Flipper message format (This is needed to show flips in webhook)"
+            description = "Flipper message format (NOTE: This is needed to show flips in webhook)."
     )
     public static String msgFormat = "";
 
@@ -204,16 +234,17 @@ public class Settings extends Vigilant {
             category = "Webhooks",
             subcategory = "Misc",
             name = "Discord ID",
-            description = "Your discord ID if you want to be pinged with webhooks"
+            description = "Enter your Discord ID if you want to be pinged in webhook messages."
     )
     public static String discordID = "";
 
+    // ANTI-AFK
     @Property(
             type = PropertyType.SWITCH,
             category = "Anti-AFK",
             subcategory = "Prevention",
             name = "Anti-Limbo",
-            description = "Leaves limbo and joins skyblock"
+            description = "Leaves limbo and joins SkyBlock."
     )
     public static boolean antiLimbo = false;
 
@@ -224,7 +255,7 @@ public class Settings extends Vigilant {
             name = "Anti-Lobby",
             description = "Leaves any lobby and takes you back to skyblock"
     )
-    public static boolean autoLobby = false;
+    public static boolean antiLobby = false;
 
     @Property(
             type = PropertyType.SWITCH,
@@ -276,29 +307,23 @@ public class Settings extends Vigilant {
     )
     public static int minFlipTime = 2;
 
-    @Property(
-            type = PropertyType.SWITCH,
-            category = "Settings",
-            subcategory = "Advanced",
-            name = "KEEP THIS OFF",
-            description = "THIS MUST BE KEPT OFF"
-    )
-    public static boolean hIDDEN = false;
-
     public Settings() {
         super(CONFIG_FILE, "Void Flipper Configuration", new JVMAnnotationPropertyCollector());
         initialize();
         registerListener("autoBuy", choice -> {
-            Helpers.sendChatMessage("Autobuy " + (autoBuy ? "off" : "on"));
+            Helpers.sendChatMessage("Autobuy " + ((Boolean) choice ? fmt_a + "enabled" : fmt_c + "disabled")+ fmt_r +".");
         });
         registerListener("autoOpen", choice -> {
-            Helpers.sendChatMessage("Autoopen " + (autoOpen ? "off" : "on"));
+            Helpers.sendChatMessage("Autoopen " + ((Boolean) choice ? fmt_a + "enabled" : fmt_c + "disabled")+ fmt_r +".");
         });
         registerListener("bedDelay", choice -> {
-            Helpers.sendChatMessage("New bed click delay: " + (bedDelay+1));
+            Helpers.sendChatMessage("New bed click delay: " + (choice));
         });
+//        registerListener("bedThreadKillDelay", choice -> {
+//            Helpers.sendChatMessage("New bed thread kill delay: " + (choice));
+//        });
         registerListener("fullSkipDelay", choice -> {
-            Helpers.sendChatMessage("New full skip delay: " + (fullSkipDelay+1));
+            Helpers.sendChatMessage("New full skip delay: " + (choice));
         });
         registerListener("maxFlipTime", choice -> {
             Helpers.sendChatMessage("Maximum flip time is now: " + maxFlipTime);
@@ -307,39 +332,36 @@ public class Settings extends Vigilant {
             Helpers.sendChatMessage("Flip downtime is now: " + minFlipTime);
         });
         registerListener("antiBan", choice -> {
-            if(antiBan) Utils.stopChecker();
+            if (antiBan) Utils.stopChecker();
             else Utils.initiateChecker();
-            Helpers.sendChatMessage("Anti-Ban " + (antiBan ? "off" : "on"));
+            Helpers.sendChatMessage("Anti-Ban " + ((Boolean) choice ? fmt_a + "enabled" : fmt_c + "disabled")+ fmt_r +".");
         });
         registerListener("debug", choice -> {
-            Helpers.sendChatMessage("Debug " + (debug ? "off" : "on"));
-        });
-        registerListener("autoSell", choice -> {
-            Helpers.sendChatMessage("Auto Sell " + (autoSell ? "off" : "on"));
+            Helpers.sendChatMessage("Debug " + ((Boolean) choice ? fmt_a + "enabled" : fmt_c + "disabled")+ fmt_r +".");
         });
         registerListener("antiLimbo", choice -> {
-            Helpers.sendChatMessage("Anti-Limbo " + (antiLimbo ? "off" : "on"));
+            Helpers.sendChatMessage("Anti-Limbo " + ((Boolean) choice ? fmt_a + "enabled" : fmt_c + "disabled")+ fmt_r +".");
         });
         registerListener("autoIsland", choice -> {
-            Helpers.sendChatMessage("Auto-Island " + (autoIsland ? "off" : "on"));
+            Helpers.sendChatMessage("Auto-Island " + ((Boolean) choice ? fmt_a + "enabled" : fmt_c + "disabled")+ fmt_r +".");
         });
-        registerListener("autoLobby", choice -> {
-            Helpers.sendChatMessage("Auto-Lobby " + (autoLobby ? "off" : "on"));
+        registerListener("antiLobby", choice -> {
+            Helpers.sendChatMessage("Anti-Lobby " + ((Boolean) choice ? fmt_a + "enabled" : fmt_c + "disabled")+ fmt_r +".");
         });
-        registerListener("flipWebhooks", choice -> {
-            Helpers.sendChatMessage("Flip Webhooks  " + (flipWebhooks ? "off" : "on"));
+        registerListener("buyWebhooks", choice -> {
+            Helpers.sendChatMessage("Flip Webhooks " + ((Boolean) choice ? fmt_a + "enabled" : fmt_c + "disabled")+ fmt_r + "." + (msgFormat.isEmpty() ? " §c§lWARNING!§r You will need to put your Cofl flip format into the \"flip format\" text box for flips to both show up in chat and be sent to the webhook. If you do not, flips will be hidden." : ""));
         });
         registerListener("captchaWebhooks", choice -> {
-            Helpers.sendChatMessage("Captcha Webhooks  " + (captchaWebhooks ? "off" : "on"));
+            Helpers.sendChatMessage("Captcha Webhooks " + ((Boolean) choice ? fmt_a + "enabled" : fmt_c + "disabled")+ fmt_r +".");
         });
-        registerListener("purchaseWebhooks", choice -> {
-            Helpers.sendChatMessage("Purchase Webhooks  " + (purchaseWebhooks ? "off" : "on"));
+        registerListener("soldWebhooks", choice -> {
+            Helpers.sendChatMessage("Purchase Webhooks " + ((Boolean) choice ? fmt_a + "enabled" : fmt_c + "disabled")+ fmt_r +".");
         });
         registerListener("autoClaim", choice -> {
-            Helpers.sendChatMessage("Auto Claiming Auctions  " + (autoClaim ? "off" : "on"));
+            Helpers.sendChatMessage("Auto Claiming Auctions " + ((Boolean) choice ? fmt_a + "enabled" : fmt_c + "disabled")+ fmt_r +".");
         });
         registerListener("autoConnect", choice -> {
-            Helpers.sendChatMessage("Auto Reconnect  " + (autoConnect ? "off" : "on"));
+            Helpers.sendChatMessage("Auto Reconnect " + ((Boolean) choice ? fmt_a + "enabled" : fmt_c + "disabled")+ fmt_r +".");
         });
     }
 
